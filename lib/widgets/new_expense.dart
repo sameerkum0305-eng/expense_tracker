@@ -1,11 +1,9 @@
-
 import 'package:flutter/material.dart';
 
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key});
-
   @override
-  State<NewExpense> createState() {
+  State<StatefulWidget> createState() {
     return _NewExpenseState();
   }
 }
@@ -13,11 +11,7 @@ class NewExpense extends StatefulWidget {
 class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
-
-  void _closeModal() {
-    // Logic will be added later
-  }
-
+  //make an amount controller
   @override
   void dispose() {
     _titleController.dispose();
@@ -28,39 +22,57 @@ class _NewExpenseState extends State<NewExpense> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       child: Column(
         children: [
           TextField(
             controller: _titleController,
             maxLength: 50,
             keyboardType: TextInputType.name,
-            decoration: const InputDecoration(
-              label: Text('Title'),
-            ),
+            decoration: InputDecoration(label: Text("Title")),
           ),
-
-          TextField(
-            controller: _amountController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              prefixText: '\$ ',
-              label: Text('Amount'),
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _amountController,
+                  maxLength: 10,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    prefixText: '\$',
+                    label: Text("Amount"),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Row(
+                  children: [
+                    const Text("Selected Date"),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.calendar_month),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-
+          //Put Amount TextField
           Row(
             children: [
               ElevatedButton(
-                onPressed: _closeModal,
-                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Cancel"),
               ),
               ElevatedButton(
                 onPressed: () {
                   print(_titleController.text);
                   print(_amountController.text);
                 },
-                child: const Text('Save Expense'),
+                child: Text("Save Expense"),
               ),
             ],
           ),
