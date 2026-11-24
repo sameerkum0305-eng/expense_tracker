@@ -1,5 +1,8 @@
-import 'package:flutter/cupertino.dart';
+import 'package:expense_tracker/models/expense.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+final formatter = DateFormat.yMd();
 
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key});
@@ -13,6 +16,7 @@ class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
+  Category _selectedCategory = Category.leisure;
   //make an amount controller
   @override
   void dispose() {
@@ -66,7 +70,11 @@ class _NewExpenseState extends State<NewExpense> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text("Selected Date"),
+                    Text(
+                      _selectedDate == null
+                          ? 'Selected Date'
+                          : formatter.format(_selectedDate!),
+                    ),
                     IconButton(
                       onPressed: () {
                         _presentDatePicker();
@@ -81,12 +89,33 @@ class _NewExpenseState extends State<NewExpense> {
           //Put Amount TextField
           Row(
             children: [
+              DropdownButton(
+                value: _selectedCategory,
+                items: Category.values
+                    .map(
+                      (category) => DropdownMenuItem(
+                        value: category,
+                        child: Text(category.name.toUpperCase()),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  if (value == null) {
+                    return; //guard clause if statement
+                  }
+                  setState(() {
+                    _selectedCategory = value;
+                  });
+                },
+              ),
+              Spacer(),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
                 child: Text("Cancel"),
               ),
+              SizedBox(width: 5),
               ElevatedButton(
                 onPressed: () {
                   print(_titleController.text);
